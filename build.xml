@@ -1,0 +1,48 @@
+<project name="Singularity" default="jar" basedir=".">
+
+    <property name="build.dir" location="build"/>
+    <property name="src.dir" location="src"/>
+
+    <target name="clean" depends="" description="Cleans the output folders.">
+    	<delete dir="${build.dir}"/>
+    </target>
+
+	<target name="init" depends="" description="Initialises the output folders.">
+    	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${build.dir}/classes"/>
+       	<mkdir dir="${build.dir}/javadoc"/>
+	</target>
+	
+    <target name="compile" depends="init" description="Compile the source files.">
+        <javac source="1.6" target="1.6" srcdir="${src.dir}" destdir="${build.dir}/classes" debug="on" deprecation="on" encoding="UTF-8">
+            <classpath>
+            	<pathelement path="${java.class.path}"/>
+            	<pathelement path="lib/commons-math3-3.5.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+	<target name="javadoc" depends="init" description="Generate javadocs for all classes.">
+        <javadoc destdir="build/javadoc" author="true" version="true" use="true" windowtitle="Singularity - Machine Learning Tutorial">
+    	    <packageset dir="src" defaultexcludes="yes">
+	            <include name="org/singularity/**"/>
+            </packageset>
+            <doctitle><![CDATA[<h1>Singularity - Machine Learning Tutorial</h1>]]></doctitle>
+            <bottom><![CDATA[<i>Copyright &#169; 2016 Morten J&oslash;rgensen</i>]]></bottom>
+            <link offline="true" href="http://docs.oracle.com/javase/7/docs/api/" packagelistLoc="/tmp/java"/>
+            <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+        	<link offline="true" href="http://commons.apache.org/proper/commons-math/javadocs/api-3.3/" packagelistLoc="/tmp/math3"/>
+            <link href="http://commons.apache.org/proper/commons-math/javadocs/api-3.3/"/>
+            <classpath>
+            	<pathelement path="${java.class.path}"/>
+            	<pathelement path="lib/commons-math3-3.5.jar"/>
+            </classpath>
+	    </javadoc>
+	</target>
+
+	<target name="jar" depends="compile,javadoc" description="Creates the distribution JAR-files">
+		<jar destfile="singluarity-0.1.jar" basedir="${build.dir}/classes"/>
+		<jar destfile="singularity-api-0.1.jar" basedir="${build.dir}/javadoc"/>
+	</target>
+	
+</project>
